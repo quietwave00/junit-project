@@ -50,4 +50,14 @@ public class BookServiceTest {
     }
 
     //5. 책 수정
+    @Transactional(rollbackOn = RuntimeException.class)
+    public void 책수정하기(Long id, BookSaveRequestDto dto) { //id로 book을 찾고 update 처리
+        Optional<Book> bookOP = bookRepository.findById(id);
+        if(bookOP.isPresent()) { //값이 있을 경우
+            Book bookPS = bookOP.get();
+            bookPS.update(dto.getTitle(), dto.getAuthor());
+        } else { //null
+            throw new RuntimeException("해당 아이디를 찾을 수 없습니다.");
+        }
+    } //더티체킹(flush)
 }

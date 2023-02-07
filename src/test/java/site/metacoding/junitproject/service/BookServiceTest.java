@@ -8,6 +8,8 @@ import site.metacoding.junitproject.web.dto.BookResponseDto;
 import site.metacoding.junitproject.web.dto.BookSaveRequestDto;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor //final 생성자 주입
 @Service
@@ -23,6 +25,11 @@ public class BookServiceTest {
     }
 
     //2. 책 목록
+    public List<BookResponseDto> 책목록보기() {
+        return bookRepository.findAll().stream()
+                .map(new BookResponseDto()::toDto)
+                .collect(Collectors.toList());
+    }
 
     //3. 책 단일 조회
 

@@ -9,6 +9,7 @@ import site.metacoding.junitproject.web.dto.BookSaveRequestDto;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor //final 생성자 주입
@@ -32,6 +33,15 @@ public class BookServiceTest {
     }
 
     //3. 책 단일 조회
+    public BookResponseDto 책단일조회(Long id) {
+        Optional<Book> bookOP = bookRepository.findById(id);
+        if(bookOP.isPresent()) { //값 존재
+            return new BookResponseDto().toDto(bookOP.get());
+        } else { //null
+            throw new RuntimeException("해당 아이디를 찾을 수 없습니다.");
+        }
+    }
+
 
     //4. 책 삭제
 

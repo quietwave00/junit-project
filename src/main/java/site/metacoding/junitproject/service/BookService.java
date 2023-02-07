@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.metacoding.junitproject.domain.Book;
 import site.metacoding.junitproject.domain.BookRepository;
+import site.metacoding.junitproject.util.MailSender;
 import site.metacoding.junitproject.web.dto.BookResponseDto;
 import site.metacoding.junitproject.web.dto.BookSaveRequestDto;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private final MailSender mailSender;
 
     //1. 책 등록
     @Transactional(rollbackOn = Exception.class)

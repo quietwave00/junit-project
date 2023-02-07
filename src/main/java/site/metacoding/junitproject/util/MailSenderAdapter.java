@@ -1,5 +1,8 @@
 package site.metacoding.junitproject.util;
 
+import org.springframework.stereotype.Component;
+
+//@Component
 public class MailSenderAdapter implements MailSender{
 
 //    private Mail mail;
@@ -10,6 +13,7 @@ public class MailSenderAdapter implements MailSender{
 
     @Override
     public boolean send() {
+//        return mail.sendMail();
         return true;
     }
 }

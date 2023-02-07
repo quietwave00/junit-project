@@ -19,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 //테스트 메서드 하나 싫행 후 종료되면 데이터 초기화 됨(@Transactional) -> 그런데 auto_increment값이 초기화가 안 됨
 //table 드랍시켜 주는 sql파일 추가
 
+//@Test 실행 시 @RollBack(true)가 기본값
+//@Sql 파일로 table drop하면 HDD의 데이터가 drop됨 -> 메모리에 @BeforeEach 과정은 남아 있음
+
 
 @DataJpaTest // DB와 관련된 컴포넌트만 메모리에 로딩(단위 테스트)
 public class BookRepositoryTest {

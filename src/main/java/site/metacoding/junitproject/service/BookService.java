@@ -23,21 +23,26 @@ public class BookService {
     @Transactional(rollbackOn = Exception.class)
     public BookResponseDto 책등록하기(BookSaveRequestDto dto) {
         Book bookPS = bookRepository.save(dto.toEntity());
-        return new BookResponseDto().toDto(bookPS);
+        return bookPS.toDto();
     }
 
     //2. 책 목록
     public List<BookResponseDto> 책목록보기() {
-        return bookRepository.findAll().stream()
-                .map(new BookResponseDto()::toDto)
+        List<BookResponseDto> dtos =  bookRepository.findAll().stream()
+//                .map(new BookResponseDto()::toDto) //new는 한 번 되고 toDto()가 반복
+//                .map((bookPS) -> new BookResponseDto().toDto(bookPS)) //고친 코드
+                //refactor
+                .map(Book::toDto)
                 .collect(Collectors.toList());
+        return dtos;
     }
 
     //3. 책 단일 조회
     public BookResponseDto 책단일조회(Long id) {
         Optional<Book> bookOP = bookRepository.findById(id);
         if(bookOP.isPresent()) { //값 존재
-            return new BookResponseDto().toDto(bookOP.get());
+            Book bookPS = bookOP.get();
+            return bookPS.toDto();
         } else { //null
             throw new RuntimeException("해당 아이디를 찾을 수 없습니다.");
         }
@@ -52,14 +57,16 @@ public class BookService {
 
     //5. 책 수정
     @Transactional(rollbackOn = RuntimeException.class)
-    public void 책수정하기(Long id, BookSaveRequestDto dto) { //id로 book을 찾고 update 처리
+    public BookResponseDto 책수정하기(Long id, BookSaveRequestDto dto) { //id로 book을 찾고 update 처리
         Optional<Book> bookOP = bookRepository.findById(id);
         if(bookOP.isPresent()) { //값이 있을 경우
             Book bookPS = bookOP.get();
             bookPS.update(dto.getTitle(), dto.getAuthor());
+            return bookPS.toDto();
         } else { //null
             throw new RuntimeException("해당 아이디를 찾을 수 없습니다.");
         }
+
     } //더티체킹(flush)
 
 

@@ -1,30 +1,24 @@
 package site.metacoding.junitproject.service;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.stereotype.Service;
 import site.metacoding.junitproject.domain.Book;
 import site.metacoding.junitproject.domain.BookRepository;
 import site.metacoding.junitproject.util.MailSender;
-import site.metacoding.junitproject.util.MailSenderStub;
-import site.metacoding.junitproject.web.dto.BookResponseDto;
-import site.metacoding.junitproject.web.dto.BookSaveRequestDto;
+import site.metacoding.junitproject.web.dto.response.BookListResponseDto;
+import site.metacoding.junitproject.web.dto.response.BookResponseDto;
+import site.metacoding.junitproject.web.dto.request.BookSaveRequestDto;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.*;
 
 
@@ -74,20 +68,13 @@ public class BookServiceTest {
         lenient().when(bookRepository.findAll()).thenReturn(books);
 
         //when
-        List<BookResponseDto> bookResponseDtoList = bookService.책목록보기();
-
-        //print
-        bookResponseDtoList.stream().forEach((dto) -> {
-            System.out.println(dto.getId());
-            System.out.println(dto.getTitle());
-            System.out.println(dto.getAuthor());
-        });
+        BookListResponseDto bookListResponseDto = bookService.책목록보기();
 
         //then
-        assertThat(bookResponseDtoList.get(0).getTitle()).isEqualTo("junit강의");
-        assertThat(bookResponseDtoList.get(0).getAuthor()).isEqualTo("메타코딩");
-        assertThat(bookResponseDtoList.get(1).getTitle()).isEqualTo("spring강의");
-        assertThat(bookResponseDtoList.get(1).getAuthor()).isEqualTo("겟인데어");
+        assertThat(bookListResponseDto.getItems().get(0).getTitle()).isEqualTo("junit강의");
+        assertThat(bookListResponseDto.getItems().get(0).getAuthor()).isEqualTo("메타코딩");
+        assertThat(bookListResponseDto.getItems().get(1).getTitle()).isEqualTo("spring강의");
+        assertThat(bookListResponseDto.getItems().get(1).getAuthor()).isEqualTo("겟인데어");
 
 
     }

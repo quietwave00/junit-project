@@ -5,8 +5,9 @@ import org.springframework.stereotype.Service;
 import site.metacoding.junitproject.domain.Book;
 import site.metacoding.junitproject.domain.BookRepository;
 import site.metacoding.junitproject.util.MailSender;
-import site.metacoding.junitproject.web.dto.BookResponseDto;
-import site.metacoding.junitproject.web.dto.BookSaveRequestDto;
+import site.metacoding.junitproject.web.dto.response.BookListResponseDto;
+import site.metacoding.junitproject.web.dto.response.BookResponseDto;
+import site.metacoding.junitproject.web.dto.request.BookSaveRequestDto;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -27,14 +28,16 @@ public class BookService {
     }
 
     //2. 책 목록
-    public List<BookResponseDto> 책목록보기() {
+    public BookListResponseDto 책목록보기() {
         List<BookResponseDto> dtos =  bookRepository.findAll().stream()
 //                .map(new BookResponseDto()::toDto) //new는 한 번 되고 toDto()가 반복
 //                .map((bookPS) -> new BookResponseDto().toDto(bookPS)) //고친 코드
                 //refactor
                 .map(Book::toDto)
                 .collect(Collectors.toList());
-        return dtos;
+        BookListResponseDto bookListResponseDto = BookListResponseDto.builder().bookList(dtos).build();
+
+        return bookListResponseDto;
     }
 
     //3. 책 단일 조회

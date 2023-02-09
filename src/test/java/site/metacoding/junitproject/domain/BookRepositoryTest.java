@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 //@Sql 파일로 table drop하면 HDD의 데이터가 drop됨 -> 메모리에 @BeforeEach 과정은 남아 있음
 
 
+@ActiveProfiles("dev") //dev모드일 때만 실행
 @DataJpaTest // DB와 관련된 컴포넌트만 메모리에 로딩(단위 테스트)
 public class BookRepositoryTest {
     @Autowired

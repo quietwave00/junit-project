@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import site.metacoding.junitproject.domain.Book;
 import site.metacoding.junitproject.domain.BookRepository;
@@ -23,6 +24,7 @@ import site.metacoding.junitproject.web.dto.response.BookListResponseDto;
 import site.metacoding.junitproject.web.dto.response.BookResponseDto;
 
 //통합테스트(Controller, Service, Repository)
+@ActiveProfiles("dev") //dev모드일 때만 실행
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookApiControllerTest {
 
@@ -83,6 +85,7 @@ public class BookApiControllerTest {
     }
 
     //책 목록 보기
+    @Sql("classpath:db/tableInit.sql")
     @Test
     public void getBookList_test() {
         //given
@@ -136,6 +139,31 @@ public class BookApiControllerTest {
         DocumentContext documentContext = JsonPath.parse(response.getBody());
         Integer code = documentContext.read("$.code");
         assertThat(code).isEqualTo(1);
+    }
+
+    //책 수정
+    @Sql("classpath:db/tableInit.sql")
+    @Test
+    public void updateBook_test() throws Exception {
+        //given
+        Long id = 1L;
+        BookSaveRequestDto bookSaveRequestDto = new BookSaveRequestDto();
+        bookSaveRequestDto.setTitle("spring");
+        bookSaveRequestDto.setAuthor("나리");
+        String body = objectMapper.writeValueAsString(bookSaveRequestDto); //json 형태로 변환
+
+        //when
+        HttpEntity<String> request = new HttpEntity<>(body, httpHeaders);
+        ResponseEntity<String> response = restTemplate.exchange("/api/v1/book/" + id, HttpMethod.PUT, request, String.class);
+
+        //then
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        Integer code = documentContext.read("$.code");
+        String title = documentContext.read("$.body.title");
+
+        assertThat(code).isEqualTo(1);
+        assertThat(title).isEqualTo("spring");
+
     }
 
 

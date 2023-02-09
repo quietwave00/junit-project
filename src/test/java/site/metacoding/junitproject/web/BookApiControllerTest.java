@@ -21,8 +21,7 @@ import site.metacoding.junitproject.web.dto.request.BookSaveRequestDto;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookApiControllerTest {
 
-    @Autowired
-    private BookService bookService; //final X
+
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -38,6 +37,7 @@ public class BookApiControllerTest {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
     }
 
+    //책 저장
     @Test
     public void saveBook_test() throws Exception {
         //given
@@ -61,8 +61,5 @@ public class BookApiControllerTest {
 
         assertThat(title).isEqualTo("스프링1강");
         assertThat(author).isEqualTo("메타코딩");
-
-
-
     }
 }

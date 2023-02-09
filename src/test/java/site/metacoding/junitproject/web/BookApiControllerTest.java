@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.test.context.jdbc.Sql;
 import site.metacoding.junitproject.domain.Book;
 import site.metacoding.junitproject.domain.BookRepository;
 import site.metacoding.junitproject.service.BookService;
@@ -89,7 +90,6 @@ public class BookApiControllerTest {
         //when
         HttpEntity<String> request = new HttpEntity<>(null, httpHeaders);
         ResponseEntity<String> response = restTemplate.exchange("/api/v1/book", HttpMethod.GET, request, String.class);
-        System.out.println(response.getBody());
 
         //then
         DocumentContext documentContext = JsonPath.parse(response.getBody());
@@ -98,6 +98,27 @@ public class BookApiControllerTest {
 
         assertThat(code).isEqualTo(1);
         assertThat(title).isEqualTo("junit");
+    }
+
+    //책 단일 조회
+    @Sql("classpath:db/tableInit.sql")
+    @Test
+    public void getBookOne_test() {
+        //given
+        Long id = 1L;
+
+        //when
+        HttpEntity<String> request = new HttpEntity<>(null, httpHeaders);
+        ResponseEntity<String> response = restTemplate.exchange("/api/v1/book/" + id, HttpMethod.GET, request, String.class);
+
+
+        //then
+        DocumentContext documentContext = JsonPath.parse(response.getBody());
+        String title = documentContext.read("$.body.title");
+        String author = documentContext.read("$.body.author");
+
+        assertThat(title).isEqualTo("junit");
+        assertThat(author).isEqualTo("겟인데어");
     }
 
 

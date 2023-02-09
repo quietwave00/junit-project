@@ -71,9 +71,10 @@ public class BookApiController {
     }
 
     //4. 책 삭제하기
-    public ResponseEntity<?> deleteBook() {
-
-        return null;
+    @DeleteMapping("/api/v1/book/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+        bookService.책삭제하기(id);
+        return new ResponseEntity<>(CommonResponseDto.builder().code(1).msg("책 삭제 성공").body(null).build(), HttpStatus.OK);
     }
 
     //5. 책 수정하기

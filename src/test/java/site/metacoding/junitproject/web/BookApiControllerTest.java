@@ -85,7 +85,7 @@ public class BookApiControllerTest {
     }
 
     //책 목록 보기
-    @Sql("classpath:db/tableInit.sql")
+//    @Sql("classpath:db/tableInit.sql")
     @Test
     public void getBookList_test() {
         //given
